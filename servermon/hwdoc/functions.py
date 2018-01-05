@@ -55,8 +55,12 @@ def search(q):
     # to create one than fail
     try:
         q.__iter__()
+        # But if we have a string, do it anyway to avoid python 3's __iter__()
+        # capable strings
+        if isinstance(q, str):
+            q = (q, )
     except AttributeError:
-        q = (q,)
+        q = (q, )
 
     ids = []
 
@@ -64,7 +68,7 @@ def search(q):
         for key in q:
             try:
                 dns = gethostbyaddr(key)[0]
-            except (herror, gaierror, IndexError, error, UnicodeEncodeError):
+            except (herror, gaierror, IndexError, error, UnicodeError):
                 dns = ''
             mac = canonicalize_mac(key)
             # A heuristic to allow user to filter queries down to the unit level
@@ -122,7 +126,7 @@ def populate_tickets(equipment_list, closed=False):
                         fromlist=['hwdoc.vendor'])
     except ImportError as e:
         # TODO: Log ther error. For now just print
-        print e
+        print(e)
         return equipment_list
 
     for equipment in equipment_list:
@@ -130,7 +134,7 @@ def populate_tickets(equipment_list, closed=False):
             getattr(vm, 'get_tickets')(equipment, closed)
         except AttributeError as e:
             # TODO: Log the error. For now just print
-            print e
+            print(e)
             return equipment_list
     return equipment_list
 
