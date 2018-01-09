@@ -1,0 +1,6 @@
+checks:
+  collectstatic:
+    type: command
+    stage: promote
+    timeout: 10
+    command: /srv/deployment/servermon/servermon/servermon/servermon/manage.py collectstatic
